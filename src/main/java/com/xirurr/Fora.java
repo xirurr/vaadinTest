@@ -45,4 +45,12 @@ public class Fora {
   @XmlElement List<File> images = new ArrayList<>();
 
 
+
+void addToImagesList(File varFile){
+  images.add(varFile);
+}
+void removeFromImagesList(File varFile){
+  images.remove(varFile);
+}
+
 }

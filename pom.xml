@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.xirurr</groupId>
-    <artifactId>vaadinTests</artifactId>
+    <artifactId>ROOT</artifactId>
     <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>vaadinTests</name>
 
     <prerequisites>
@@ -14,9 +14,7 @@
     </prerequisites>
 
     <properties>
-        <vaadin.version>8.5.2</vaadin.version>
-        <vaadin.plugin.version>8.5.2</vaadin.plugin.version>
-        <jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>
@@ -33,6 +31,10 @@
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
+        <repository>
+            <id>atlassian</id>
+            <url>https://maven.atlassian.com/content/repositories/atlassian-public/</url>
+        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -40,7 +42,7 @@
             <dependency>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-bom</artifactId>
-                <version>${vaadin.version}</version>
+                <version>8.6.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -48,6 +50,13 @@
     </dependencyManagement>
 
     <dependencies>
+        <!--<dependency>
+            <groupId>org.hotswapagent</groupId>
+            <artifactId>hotswap-agent</artifactId>
+            <version>1.3.0</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>-->
         <dependency>
             <groupId>com.aspose</groupId>
             <artifactId>aspose-imaging</artifactId>
@@ -153,6 +162,30 @@
             <artifactId>vaadin-themes</artifactId>
             <version>8.6.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>drop-or-choose-upload</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/net.java.dev/pdf-renderer -->
+        <dependency>
+            <groupId>net.java.dev</groupId>
+            <artifactId>pdf-renderer</artifactId>
+            <version>1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.13</version>
+        </dependency>
+
+
 
 
     </dependencies>
@@ -172,7 +205,7 @@
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.plugin.version}</version>
+                <version>8.6.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -180,7 +213,9 @@
                             <goal>update-widgetset</goal>
                             <goal>compile</goal>
                             <!-- Comment out compile-theme goal to use on-the-fly theme compilation -->
+<!--
                             <goal>compile-theme</goal>
+-->
                         </goals>
                     </execution>
                 </executions>
@@ -191,6 +226,7 @@
                 <version>3.0.0</version>
                 <!-- Clean up also any pre-compiled themes -->
                 <configuration>
+
                     <filesets>
                         <fileset>
                             <directory>src/main/webapp/VAADIN/themes</directory>
@@ -206,6 +242,7 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.4.14.v20181114</version>
+
             </plugin>
             <!-- The
              plugin allows us to easily test the development build by

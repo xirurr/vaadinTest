@@ -2,6 +2,7 @@ package com.xirurr;
 
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.BorderStyle;
 import com.vaadin.ui.*;
@@ -35,12 +36,14 @@ public class HorizontalLayout2  extends HorizontalLayout {
 
   public void addComponents(List<File> list) {
     for (File varFile : list) {
+
       String var = varFile.toString();
       String icoPath = var.replace(".jpeg","ico.jpeg");
-      ThemeResource varRes = new ThemeResource("../../"+icoPath);
+      Resource icoRes = new ThemeResource("../../"+icoPath);
+      Resource imgRes = new ThemeResource("../../"+var);
       Link combo = new Link(null,
-              new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/VAADIN/"+var),"MYLINK",40,40,BorderStyle.DEFAULT);
-      combo.setIcon(varRes);
+              imgRes,"MYLINK",40,40,BorderStyle.DEFAULT);
+      combo.setIcon(icoRes);
       super.addComponent(combo);
     }
   }
