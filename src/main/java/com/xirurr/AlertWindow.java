@@ -3,6 +3,7 @@ package com.xirurr;
 import com.vaadin.ui.*;
 
 import java.io.File;
+import java.io.IOException;
 
 public class AlertWindow extends AbstractWindow {
   public AlertWindow(String alert) {
@@ -25,12 +26,14 @@ public class AlertWindow extends AbstractWindow {
     setModal(true);
 
     bt.addClickListener(e -> {
-      currentUI.deletePerson(element);
+      try {
+        currentUI.deletePerson(element);
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      }
       close();
     });
-    dontbt.addClickListener(e -> {
-      close();
-    });
+    dontbt.addClickListener(e -> close());
   }
 
 

@@ -23,10 +23,7 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.*;
 
 
@@ -151,24 +148,32 @@ public class MyUI extends UI {
     UI.getCurrent().addWindow(sub);
   }
 
-  public void deletePerson(Fora varFora) {
-    Path varPath = Paths.get(resDIr + "/output/" + varFora.getName() + "/");
+  public void deletePerson(Fora varFora) throws IOException {
+    Path varPath = Paths.get(resDIr + "output/" + varFora.getName() + "/");
     Path destPath = Paths.get(resDIr + "output/trash/" + varFora.getName() + "/");
     List<File> varImages = new ArrayList<>();
     try {
       Files.move(varPath, destPath, StandardCopyOption.REPLACE_EXISTING);
-    } catch (IOException e) {
+    } catch (DirectoryNotEmptyException e) {
+      for (int i = 0; i < 100; i++) {
+        Path varDestPath;
+        try {
+          varDestPath = Paths.get(destPath.toString().replace(varFora.getName(), varFora.getName() + i));
+          Files.move(varPath, varDestPath, StandardCopyOption.REPLACE_EXISTING);
+          break;
+        } catch (DirectoryNotEmptyException xe) {
+        }
+      }
+    } catch (Exception e) {
       e.printStackTrace();
     }
     for (File varFile : varFora.getImages()) {
-      varFile = new File(varFile.toString().replace("output/" + varFora.getName(), "/output/trash/" + varFora.getName()));
+      varFile = new File(varFile.toString().replace("output/" + varFora.getName(), "output/trash/" + varFora.getName()));
       varImages.add(varFile);
     }
     varFora.setImages(varImages);
     Serialiser ser = new Serialiser();
     ser.marshaToXML(Paths.get(destPath.toString() + "/prop.xml"), varFora);
-
-
     foraList.remove(varFora);
     addDataProvider(foraList);
   }
