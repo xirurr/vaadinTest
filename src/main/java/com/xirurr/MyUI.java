@@ -77,7 +77,7 @@ public class MyUI extends UI {
     addDataProvider(foraList);
 
 
-    Button addButton = new Button(resDIr);
+    Button addButton = new Button("ADD NEW");
     addButton.addClickListener(e -> addPerson());
     layout.addComponents(filterTextField, mainGrid, addButton);
     setContent(layout);
@@ -168,7 +168,7 @@ public class MyUI extends UI {
       e.printStackTrace();
     }
     for (File varFile : varFora.getImages()) {
-      varFile = new File(varFile.toString().replace("output/" + varFora.getName(), "output/trash/" + varFora.getName()));
+      varFile = new File(varFile.toString().replace("output\\" + varFora.getName(), "output\\trash\\" + varFora.getName()));
       varImages.add(varFile);
     }
     varFora.setImages(varImages);
