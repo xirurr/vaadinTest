@@ -109,24 +109,27 @@ public class Converter {
           case "png":
             dest = dest.replace(".png", ".jpeg");
             convertOtherToJpegAndSave(IS, dest);
+            varFile.delete();
             dest = dest.replace(baseDir, "");
             finalImagesList.add(new File(dest));
             break;
           case "pdf":
             dest = dest.replace(".pdf", ".jpeg");
             convertPdfToJpegAndSave(IS, dest);
+            varFile.delete();
             dest = dest.replace(baseDir, "");
             finalImagesList.add(new File(dest));
             break;
           case "jpeg":
             convertOtherToJpegAndSave(IS, dest);
+            varFile.delete();
             dest = dest.replace(baseDir, "");
             finalImagesList.add(new File(dest));
             break;
-
           case "emf":
             dest = dest.replace(".emf", ".jpeg");
             converEmfToJpegANdSave(IS, dest);
+            varFile.delete();
             dest = dest.replace(baseDir, "");
             finalImagesList.add(new File(dest));
             break;
