@@ -42,7 +42,7 @@ public class MyUI extends UI {
   List<Fora> foraList;
   ListDataProvider<Fora> dataProvider;
   TextField filterTextField;
-  String resDIr = new WorkingExt().getBaseDir();
+  String resDIr = new WorkingExt().getResDir();
 
 
   @Override
@@ -53,10 +53,10 @@ public class MyUI extends UI {
     chechCreateTrashDir(resDIr);
     mainGrid = new Grid<>();
     foraList = getForaWithString();
-    mainGrid.addColumn(Fora::getName).setCaption("Название").setExpandRatio(1);
-    mainGrid.addColumn(Fora::getAreal).setCaption("Ареал").setExpandRatio(1);
+    mainGrid.addColumn(Fora::getName).setCaption("Name").setExpandRatio(1);
+    mainGrid.addColumn(Fora::getAreal).setCaption("Areal").setExpandRatio(1);
     BooleanSwitchRenderer<Fora> booleanRenderer = new BooleanSwitchRenderer<>(Fora::setAggl, "", "");
-    mainGrid.addColumn(Fora::isAggl).setId("aggl").setCaption("Агглютинированный").setExpandRatio(1).setRenderer(booleanRenderer);
+    mainGrid.addColumn(Fora::isAggl).setId("aggl").setCaption("Agglutino").setExpandRatio(1).setRenderer(booleanRenderer);
     mainGrid.addComponentColumn(person -> new HorizontalLayout2(person.getImages())).setSortable(false).setId("image").setCaption("image").setExpandRatio(8);
     mainGrid.addComponentColumn(this::buildExtendButton);
     mainGrid.addComponentColumn(this::buildDeleteButton);
@@ -76,10 +76,10 @@ public class MyUI extends UI {
     filterTextField.setPlaceholder("name filter");
     addDataProvider(foraList);
 
-
+    Label lb1 = new Label(resDIr);
     Button addButton = new Button("ADD NEW");
     addButton.addClickListener(e -> addPerson());
-    layout.addComponents(filterTextField, mainGrid, addButton);
+    layout.addComponents(lb1,filterTextField, mainGrid, addButton);
     setContent(layout);
   }
 
@@ -168,7 +168,7 @@ public class MyUI extends UI {
       e.printStackTrace();
     }
     for (File varFile : varFora.getImages()) {
-      varFile = new File(varFile.toString().replace("output\\" + varFora.getName(), "output\\trash\\" + varFora.getName()));
+      varFile = new File(varFile.toString().replace("output", "output/trash/"));
       varImages.add(varFile);
     }
     varFora.setImages(varImages);

@@ -36,11 +36,13 @@ public class WorkingExt {
     }
     return resDIr;
   }
-
-  public String getFromTempDir() {
-    return System.getProperty("java.io.tmpdir").replace(System.getProperty("java.io.tmpdir"), getBaseDir());
+  public String getResDir(){
+    return System.getProperty("catalina.home")+"/res/";
   }
-  public String getFromTempDir(String varName) {
-    return varName = varName.replace(System.getProperty("java.io.tmpdir"), getBaseDir());
+  public String getFromTempDir() {
+    return System.getProperty("java.io.tmpdir").replace(System.getProperty("java.io.tmpdir"), getResDir());
+  }
+  public String getFromTempDir(String varName, String foraNme) {
+    return varName = varName.replace(System.getProperty("java.io.tmpdir"), getResDir()+"output/"+foraNme);
   }
 }

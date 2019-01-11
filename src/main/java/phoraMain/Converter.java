@@ -101,8 +101,8 @@ public class Converter {
         varFile = new File(varFile.toString().replace(".jpg",".jpeg"));
       }
       if (varFile.toString().toLowerCase().contains("temp")) {
-        String baseDir = new WorkingExt().getBaseDir();
-        String dest = new WorkingExt().getFromTempDir(varFile.toString()).replace("/VAADIN/", "/VAADIN/output/" + name + "/");
+        String baseDir = new WorkingExt().getResDir();
+        String dest = new WorkingExt().getFromTempDir(varFile.toString(),name);
         InputStream IS = new FileInputStream(varFile);
         String ext1 = FilenameUtils.getExtension(varFile.toString());
         switch (ext1) {

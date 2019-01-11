@@ -41,9 +41,11 @@ public class HorizontalLayout2  extends HorizontalLayout {
       String icoPath = var.replace(".jpeg","ico.jpeg");
       Resource icoRes = new ThemeResource("../../"+icoPath);
       Resource imgRes = new ThemeResource("../../"+var);
+      Resource icoRes2 = new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/static/"+icoPath);
+      Resource imgRes2 = new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/static/"+var);
       Link combo = new Link(null,
-              imgRes,"MYLINK",40,40,BorderStyle.DEFAULT);
-      combo.setIcon(icoRes);
+              imgRes2,"MYLINK",40,40,BorderStyle.DEFAULT);
+      combo.setIcon(icoRes2);
       super.addComponent(combo);
     }
   }

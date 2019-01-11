@@ -2,6 +2,7 @@ package com.xirurr;
 
 
 import com.vaadin.server.ExternalResource;
+import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.BorderStyle;
 import com.vaadin.ui.*;
@@ -19,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EditWindow extends AbstractWindow {
   List<Fora> foraList;
   List<File> varImageList = new ArrayList<>();
-  String resDIr = new WorkingExt().getBaseDir();
+  String resDIr = new WorkingExt().getResDir();
   Fora varFora;
   boolean ImageAdded;
 
@@ -46,10 +47,11 @@ public class EditWindow extends AbstractWindow {
     for (File var : varFora.getImages()) {
       HorizontalLayout lane = new HorizontalLayout();
       String icoPath = var.toString().replace(".jpeg", "ico.jpeg");
-      ThemeResource varRes = new ThemeResource("../../" + icoPath);
+      Resource icoRes2 = new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/static/"+icoPath);
+      Resource imgRes2 = new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/static/"+var);
       Link combo = new Link(null,
-              new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/VAADIN/" + var), "MYLINK", 40, 40, BorderStyle.DEFAULT);
-      combo.setIcon(varRes);
+              imgRes2, "MYLINK", 40, 40, BorderStyle.DEFAULT);
+      combo.setIcon(icoRes2);
       CheckBox cb = new CheckBox("delete?");
       imagesToDelete.put(var, cb);
       lane.addComponents(combo, cb);
@@ -118,7 +120,7 @@ public class EditWindow extends AbstractWindow {
   }
 
   private void rename(Fora varFora, String newName) {
-    Path pathToDir = Paths.get("D:\\YandexDisk\\GIT\\vaadinTests\\src\\main\\webapp\\VAADIN\\output\\" + varFora.getName());
+    Path pathToDir = Paths.get(resDIr + "/output/" + varFora.getName());
     if (!Files.exists(pathToDir)) {
       try {
         Files.createDirectory(pathToDir);
@@ -126,8 +128,7 @@ public class EditWindow extends AbstractWindow {
         e.printStackTrace();
       }
     }
-    pathToDir.toFile().renameTo(new File("D:\\YandexDisk\\GIT\\vaadinTests\\src\\main\\webapp\\VAADIN\\output\\" + newName));
-
+    pathToDir.toFile().renameTo(new File(resDIr +"/output/" + newName));
     List<File> filesToRemove = new ArrayList<>();
     List<File> filesToAdd = new ArrayList<>();
     for (File var : varFora.getImages()) {

@@ -16,7 +16,7 @@ public class AddWindow extends AbstractWindow {
   List<Fora> foraList;
   List<File> varImageList = new ArrayList<>();
   List<File> finalImagesList = new ArrayList<>();
-  String resDIr = new WorkingExt().getBaseDir();
+  String resDIr = new WorkingExt().getResDir();
 
 
   public AddWindow(List<Fora> foraList,Grid mainGrid,MyUI currentUI) {
