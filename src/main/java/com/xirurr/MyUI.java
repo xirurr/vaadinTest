@@ -24,7 +24,10 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -53,20 +56,15 @@ public class MyUI extends UI {
     chechCreateTrashDir(resDIr);
     mainGrid = new Grid<>();
     foraList = getForaWithString();
-    mainGrid.addColumn(Fora::getName).setCaption("Name").setExpandRatio(1);
-    mainGrid.addColumn(Fora::getAreal).setCaption("Areal").setExpandRatio(1);
+
+    mainGrid.addColumn(Fora::getName).setCaption("Name").setExpandRatio(1).setId("NAME");
+    mainGrid.addComponentColumn(this::buildToolpitLabel).setCaption("Areal").setExpandRatio(0);
     BooleanSwitchRenderer<Fora> booleanRenderer = new BooleanSwitchRenderer<>(Fora::setAggl, "", "");
-    mainGrid.addColumn(Fora::isAggl).setId("aggl").setCaption("Agglutino").setExpandRatio(1).setRenderer(booleanRenderer);
+    mainGrid.addColumn(Fora::isAggl).setId("aggl").setCaption("Agglutino").setExpandRatio(0).setRenderer(booleanRenderer);
     mainGrid.addComponentColumn(person -> new HorizontalLayout2(person.getImages())).setSortable(false).setId("image").setCaption("image").setExpandRatio(8);
-    mainGrid.addComponentColumn(this::buildExtendButton);
-    mainGrid.addComponentColumn(this::buildDeleteButton);
-    HashSet<String> arials = new HashSet<>();
-    //   arials = setListofArials(foraList, arials);
-    //  ComboBox<String> comboBox = new ComboBox<>("Ареал");
-
-
-    //  mainGrid.setItems(foraList);
-    //  mainGrid.setColumnResizeMode(ColumnResizeMode.SIMPLE);
+    mainGrid.addComponentColumn(this::buildExtendButton).setSortable(false);
+    mainGrid.addComponentColumn(this::buildDeleteButton).setSortable(false);
+    mainGrid.sort("NAME");
     mainGrid.setWidth("100%");
     mainGrid.setSelectionMode(Grid.SelectionMode.NONE);
 
@@ -76,10 +74,9 @@ public class MyUI extends UI {
     filterTextField.setPlaceholder("name filter");
     addDataProvider(foraList);
 
-    Label lb1 = new Label(resDIr);
     Button addButton = new Button("ADD NEW");
     addButton.addClickListener(e -> addPerson());
-    layout.addComponents(lb1,filterTextField, mainGrid, addButton);
+    layout.addComponents(filterTextField, mainGrid, addButton);
     setContent(layout);
   }
 
@@ -127,6 +124,29 @@ public class MyUI extends UI {
       extendPerson(varFora);
     });
     return (V) button;
+  }
+  private <V extends Component> V buildToolpitLabel(Fora varFora) {
+    String fullAreal = varFora.getAreal();
+    StringBuilder reducedAreal = new StringBuilder();
+    if (fullAreal!=null && !fullAreal.equals(" ")) {
+      for (String s:fullAreal.split(" ")){
+        if (s.length()>=1) {
+          reducedAreal.append(s.toUpperCase().charAt(0));
+          if (s.length() > 1) {
+            reducedAreal.append(s.toLowerCase().charAt(1));
+          }
+          if (s.length() > 2) {
+            reducedAreal.append(s.toLowerCase().charAt(2));
+          }
+          reducedAreal.append("-");
+        }
+      }
+    }
+    if (reducedAreal.length()>0){
+    reducedAreal.deleteCharAt(reducedAreal.length()-1);}
+    Label varLb = new Label(reducedAreal.toString());
+    varLb.setDescription(varFora.getAreal());
+    return (V) varLb;
   }
 
   private <V extends Component> V buildDeleteButton(Fora fora) {

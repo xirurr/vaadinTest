@@ -2,8 +2,10 @@ package com.xirurr;
 
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.io.FilenameUtils;
 import server.droporchoose.UploadComponent;
@@ -17,6 +19,8 @@ public class UploadWindow<T extends AbstractWindow> extends AbstractWindow {
   private static final long serialVersionUID = 6255201979868278965L;
   private final VerticalLayout mainLayout = new VerticalLayout();
   T origin;
+  AlertWindow imgAlert;
+  boolean uploaded;
 
   public UploadWindow(T originWindow) {
     super("UPLOAD");
@@ -35,10 +39,22 @@ public class UploadWindow<T extends AbstractWindow> extends AbstractWindow {
 
   private void uploadReceived(String fileName, Path file) {
     Notification.show("Upload finished: " + fileName, Type.HUMANIZED_MESSAGE);
+    if (!uploaded) {
+      imgAlert = new AlertWindow();
+      UI.getCurrent().getUI().getUI().addWindow(imgAlert);
+      imgAlert.setPosition((int) (Page.getCurrent().getBrowserWindowWidth() * 0.9), 0);
+      uploaded = true;
+    }
     String ext1 = FilenameUtils.getExtension(fileName);
     File dest = new File(file.toString() + "." + ext1);
     file.toFile().renameTo(dest);
     origin.addToImageList(dest);
+    imgAlert.addImage(dest);
+
+    this.addCloseListener(o -> {
+      imgAlert.close();
+      origin.renewImg();
+    });
   }
 
   private void uploadStarted(String fileName) {

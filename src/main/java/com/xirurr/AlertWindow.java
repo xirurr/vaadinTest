@@ -1,11 +1,14 @@
 package com.xirurr;
 
+import com.vaadin.server.FileResource;
+import com.vaadin.server.Resource;
 import com.vaadin.ui.*;
 
 import java.io.File;
 import java.io.IOException;
 
 public class AlertWindow extends AbstractWindow {
+  VerticalLayout ver;
   public AlertWindow(String alert) {
     final FormLayout content = new FormLayout();
     Label lb = new Label(alert);
@@ -36,9 +39,15 @@ public class AlertWindow extends AbstractWindow {
     dontbt.addClickListener(e -> close());
   }
 
-
-  @Override
-  public void addToImageList(File file) {
-
+  public AlertWindow(){
+    ver = new VerticalLayout();
+    setContent(ver);
+  }
+  public void addImage(File varFile){
+    Resource res = new FileResource(varFile);
+    Image img = new Image(null,res);
+    img.setWidth("60");
+    img.setHeight("60");
+    ver.addComponent(img);
   }
 }

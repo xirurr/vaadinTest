@@ -2,8 +2,8 @@ package com.xirurr;
 
 
 import com.vaadin.server.ExternalResource;
+import com.vaadin.server.FileResource;
 import com.vaadin.server.Resource;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.BorderStyle;
 import com.vaadin.ui.*;
 import phoraMain.Converter;
@@ -23,13 +23,17 @@ public class EditWindow extends AbstractWindow {
   String resDIr = new WorkingExt().getResDir();
   Fora varFora;
   boolean ImageAdded;
+  HorizontalLayout HorImgLayout;
+  VerticalLayout ImgLayout;
+  VerticalLayout VarImgLayout;
 
   public EditWindow(Fora varFora2, List<Fora> foraList2, MyUI currentUI) {
     super(varFora2.getName());
     this.foraList = foraList2;
     this.varFora = varFora2;
-    this.setWidth(300.0f, Unit.PIXELS);
-    final FormLayout content = new FormLayout();
+
+    //this.setWidth(300.0f, Unit.PIXELS);
+    final VerticalLayout content = new VerticalLayout();
     TextField foraName = new TextField("Name");
     foraName.setValue(varFora.getName());
     ComboBox<String> arialCombo = new MyComboBox("Areal", varFora, foraList);
@@ -41,21 +45,28 @@ public class EditWindow extends AbstractWindow {
 
     content.addComponents(foraName, arialCombo, aggllState, addImageButton);
     content.setMargin(true);
+
+    HorImgLayout = new HorizontalLayout();
+    ImgLayout = new VerticalLayout();
+    VarImgLayout = new VerticalLayout();
+    HorImgLayout.addComponents(ImgLayout,VarImgLayout);
+    content.addComponent(HorImgLayout);
+
     setContent(content);
 
     Map<File, CheckBox> imagesToDelete = new HashMap<>();
     for (File var : varFora.getImages()) {
       HorizontalLayout lane = new HorizontalLayout();
       String icoPath = var.toString().replace(".jpeg", "ico.jpeg");
-      Resource icoRes2 = new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/static/"+icoPath);
-      Resource imgRes2 = new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/static/"+var);
+      Resource icoRes2 = new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/static/" + icoPath);
+      Resource imgRes2 = new ExternalResource("http://66160762e8ed.sn.mynetname.net:8080/static/" + var);
       Link combo = new Link(null,
               imgRes2, "MYLINK", 40, 40, BorderStyle.DEFAULT);
       combo.setIcon(icoRes2);
       CheckBox cb = new CheckBox("delete?");
       imagesToDelete.put(var, cb);
-      lane.addComponents(combo, cb);
-      content.addComponent(lane);
+      lane.addComponents(cb, combo);
+      ImgLayout.addComponent(lane);
     }
 
     Button saveButton = new Button("SAVE");
@@ -93,7 +104,7 @@ public class EditWindow extends AbstractWindow {
       varFora.setAreal(arialCombo.getValue());
     }
     if (changes.get()) {
-      new phoraMain.Serialiser().marshaToXML(Paths.get(resDIr+"/output/"
+      new phoraMain.Serialiser().marshaToXML(Paths.get(resDIr + "/output/"
                       + varFora.getName() + "/" + "prop.xml")
               , varFora);
     }
@@ -128,7 +139,7 @@ public class EditWindow extends AbstractWindow {
         e.printStackTrace();
       }
     }
-    pathToDir.toFile().renameTo(new File(resDIr +"/output/" + newName));
+    pathToDir.toFile().renameTo(new File(resDIr + "/output/" + newName));
     List<File> filesToRemove = new ArrayList<>();
     List<File> filesToAdd = new ArrayList<>();
     for (File var : varFora.getImages()) {
@@ -157,13 +168,24 @@ public class EditWindow extends AbstractWindow {
     ImageAdded = true;
   }
 
+  @Override
+  public void renewImg() {
+    for (File varFile : varImageList) {
+        Resource res = new FileResource(varFile);
+        Image img = new Image(null,res);
+        img.setHeight("40");
+        img.setWidth("40");
+      VarImgLayout.addComponent(img);
+    }
+  }
+
   private void convertAndSaveImagesFromList() {
     Converter conv = new Converter();
     try {
-     varImageList = conv.converAndAddToFinalImageList(varFora.getName(),varImageList);
-     for (File varFile:varImageList){
-       varFora.addToImagesList(varFile);
-     }
+      varImageList = conv.converAndAddToFinalImageList(varFora.getName(), varImageList);
+      for (File varFile : varImageList) {
+        varFora.addToImagesList(varFile);
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }
