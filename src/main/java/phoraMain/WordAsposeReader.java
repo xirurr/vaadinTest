@@ -3,6 +3,7 @@ package phoraMain;
 
 import com.aspose.words.*;
 import com.aspose.words.Shape;
+import com.xirurr.Fora;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -100,7 +101,7 @@ public class WordAsposeReader {
               if (imageFileName.contains(".png")) {
                 imageFileName = imageFileName.replace(".png", ".jpeg");
               }
-              converter.convertPNGtoJpegAndSave2(var2.toStream(), prevDir + "/" + imageFileName);
+              converter.convertOtherToJpegAndSave(var2.toStream(), prevDir + "/" + imageFileName);
               writeImageToClassAndMarshalIt(new File(prevDir + "/" + imageFileName));
               imageIndex++;
             }
@@ -129,16 +130,9 @@ public class WordAsposeReader {
     marshaToXML(file);
   }
 
-  private void marshaToXML(Path file) {
-    try {
-      JAXBContext jaxbContext = JAXBContext.newInstance(Fora.class);
-      Marshaller jaxbMarshaller = null;
-      jaxbMarshaller = jaxbContext.createMarshaller();
-      jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-      jaxbMarshaller.marshal(varFora, file.toFile());
-    } catch (JAXBException e) {
-      e.printStackTrace();
-    }
+  private void marshaToXML(Path file) { //ИЗМЕНИЛ НА ВЫПОЛНЕНИЕ ЧЕРЕЗ СОЗДАНИЕ ОБЪЕКТА, НЕ ПРОВЕРЯЛ НА ВОРДОВСКОМ ДОКУМЕНТЕ
+    Serialiser ser = new Serialiser();
+    ser.marshaToXML(file,varFora);
   }
 
   private String clearVar(String text) {
